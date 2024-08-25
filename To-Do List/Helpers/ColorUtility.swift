@@ -10,10 +10,14 @@ import UIKit
 final class ColorUtility {
     
     static func getRandomColor() -> UIColor {
-        let colors: [UIColor] = [
+        let colors = availableColors()
+        return colors.randomElement() ?? .gray
+    }
+    
+    static func availableColors() -> [UIColor] {
+        return [
             .wRed, .wBeige, .wLightGreen, .wGreen, .wMint,
             .wCyan, .wLightBlue, .wPurple, .wLavender, .wPink
         ]
-        return colors.randomElement() ?? .gray
     }
 }

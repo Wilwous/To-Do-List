@@ -5,6 +5,13 @@
 //  Created by Антон Павлов on 23.08.2024.
 //
 
+//
+//  TaskTableViewCell.swift
+//  To-Do List
+//
+//  Created by Антон Павлов on 23.08.2024.
+//
+
 import UIKit
 
 final class TaskTableViewCell: UITableViewCell {
@@ -45,6 +52,15 @@ final class TaskTableViewCell: UITableViewCell {
         return view
     }()
     
+    private let statusIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 10
+        imageView.layer.masksToBounds = true
+        
+        return imageView
+    }()
+    
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -79,6 +95,14 @@ final class TaskTableViewCell: UITableViewCell {
         dateFormatter.dateStyle = .short
         dateLabel.text = dateFormatter.string(from: task.creationDate)
         colorIndicator.backgroundColor = task.color
+        
+        if task.isCompleted {
+            statusIcon.image = UIImage(systemName: "checkmark.circle.fill")
+            statusIcon.tintColor = .systemGreen
+        } else {
+            statusIcon.image = UIImage(systemName: "circle")
+            statusIcon.tintColor = .systemGray
+        }
     }
     
     // MARK: - Setup View
@@ -88,7 +112,8 @@ final class TaskTableViewCell: UITableViewCell {
          colorIndicator,
          titleLabel,
          descriptionLabel,
-         dateLabel
+         dateLabel,
+         statusIcon
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
@@ -109,16 +134,21 @@ final class TaskTableViewCell: UITableViewCell {
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: colorIndicator.trailingAnchor, constant: 15),
-            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            titleLabel.trailingAnchor.constraint(equalTo: statusIcon.leadingAnchor, constant: -10),
             
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: colorIndicator.trailingAnchor, constant: 15),
-            descriptionLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            descriptionLabel.trailingAnchor.constraint(equalTo: statusIcon.leadingAnchor, constant: -10),
             
             dateLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
             dateLabel.leadingAnchor.constraint(equalTo: colorIndicator.trailingAnchor, constant: 15),
-            dateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            dateLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10)
+            dateLabel.trailingAnchor.constraint(equalTo: statusIcon.leadingAnchor, constant: -10),
+            dateLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+            
+            statusIcon.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            statusIcon.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            statusIcon.widthAnchor.constraint(equalToConstant: 24),
+            statusIcon.heightAnchor.constraint(equalToConstant: 24)
         ])
     }
 }

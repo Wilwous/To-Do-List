@@ -44,7 +44,7 @@ final class ToDoListViewController: UIViewController {
     // MARK: - Setup View
     
     private func setupNavigationBar() {
-        title = "To-Do List"
+        title = "Список задач"
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
@@ -52,6 +52,10 @@ final class ToDoListViewController: UIViewController {
                 addTaskTapped
             )
         )
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = "Назад"
+        navigationItem.backBarButtonItem = backButton
     }
     
     private func addElements() {
@@ -88,7 +92,9 @@ final class ToDoListViewController: UIViewController {
     }
     
     @objc private func addTaskTapped() {
-        // TODO: Логика создания новой задачи
+        let addTaskVC = AddTaskViewController()
+        addTaskVC.delegate = self
+        navigationController?.pushViewController(addTaskVC, animated: true)
     }
 }
 
@@ -105,5 +111,14 @@ extension ToDoListViewController: UITableViewDataSource, UITableViewDelegate {
         cell.configure(with: task)
         
         return cell
+    }
+}
+
+// MARK: - AddTaskViewControllerDelegate
+
+extension ToDoListViewController: AddTaskViewControllerDelegate {
+    func didAddTask(_ task: TaskModel) {
+        tasks.append(task)
+        tableView.reloadData()
     }
 }
