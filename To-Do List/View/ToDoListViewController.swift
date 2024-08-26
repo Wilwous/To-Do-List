@@ -15,6 +15,24 @@ final class ToDoListViewController: UIViewController {
     
     // MARK: - UI Components
     
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.hidesWhenStopped = true
+        
+        return indicator
+    }()
+    
+    private lazy var refreshControl: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(
+            self,
+            action: #selector(refreshTasks),
+            for: .valueChanged
+        )
+        
+        return refresh
+    }()
+    
     private lazy var tableView: UITableView = {
         let table = UITableView()
         table.dataSource = self
@@ -22,6 +40,7 @@ final class ToDoListViewController: UIViewController {
         table.separatorStyle = .none
         table.showsVerticalScrollIndicator = false
         table.estimatedRowHeight = 100
+        table.refreshControl = refreshControl
         table.register(
             TaskTableViewCell.self,
             forCellReuseIdentifier: "TaskCell"
@@ -59,7 +78,8 @@ final class ToDoListViewController: UIViewController {
     }
     
     private func addElements() {
-        [tableView
+        [tableView,
+        activityIndicator
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -71,21 +91,32 @@ final class ToDoListViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
     // MARK: - Network
     
     private func fetchTasks() {
+        activityIndicator.startAnimating()
         NetworkManager.shared.fetchTasks { [weak self] result in
             DispatchQueue.main.async {
+                self?.activityIndicator.stopAnimating()
+                self?.refreshControl.endRefreshing()
                 switch result {
                 case .success(let tasks):
                     self?.tasks = tasks
                     self?.tableView.reloadData()
                 case .failure(let error):
                     print("Failed to fetch tasks: \(error)")
+                    AlertManager.showAlert(
+                        on: self!,
+                        title: "Ошибка",
+                        message: "Не удалось загрузить задачи. Попробуйте снова."
+                    )
                 }
             }
         }
@@ -95,6 +126,10 @@ final class ToDoListViewController: UIViewController {
         let addTaskVC = AddTaskViewController()
         addTaskVC.delegate = self
         navigationController?.pushViewController(addTaskVC, animated: true)
+    }
+    
+    @objc private func refreshTasks() {
+        fetchTasks()
     }
 }
 

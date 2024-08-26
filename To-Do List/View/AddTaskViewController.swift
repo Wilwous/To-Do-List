@@ -90,9 +90,16 @@ final class AddTaskViewController: UIViewController {
         let button = UIButton()
         button.setTitle("Создать", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .blue
+        button.backgroundColor = .wBlue
         button.layer.cornerRadius = 16
-        button.addTarget(self, action: #selector(creationButtonTapped), for: .touchUpInside)
+        button.addTarget(
+            self,
+            action: #selector(
+                creationButtonTapped
+            ),
+            for: .touchUpInside
+        )
+        
         return button
     }()
     
@@ -146,18 +153,10 @@ final class AddTaskViewController: UIViewController {
             colorCollectionView.heightAnchor.constraint(equalToConstant: 140),
             
             creationButton.topAnchor.constraint(equalTo: colorCollectionView.bottomAnchor, constant: 24),
-            creationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            creationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            creationButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            creationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
             creationButton.heightAnchor.constraint(equalToConstant: 48)
         ])
-    }
-    
-    // MARK: - Alert
-    
-    private func showAlert(_ title: String, _ message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true)
     }
     
     // MARK: - Actions
@@ -165,7 +164,11 @@ final class AddTaskViewController: UIViewController {
     @objc private func creationButtonTapped() {
         guard let title = titleTextField.text, !title.isEmpty,
               let description = descriptionTextView.text, !description.isEmpty else {
-            showAlert("Ошибка", "Пожалуйста, заполните все поля")
+            AlertManager.showAlert(
+                on: self,
+                title: "Ошибка",
+                message: "Пожалуйста, заполните все поля"
+            )
             return
         }
         

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C1E14AA2C7CBB9000A700D7 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1E14A92C7CBB9000A700D7 /* AlertManager.swift */; };
 		7C3E54152C79E71800559C27 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3E54142C79E71800559C27 /* AppDelegate.swift */; };
 		7C3E54172C79E71800559C27 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3E54162C79E71800559C27 /* SceneDelegate.swift */; };
 		7C3E54192C79E71800559C27 /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3E54182C79E71800559C27 /* ToDoListViewController.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7C1E14A92C7CBB9000A700D7 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		7C3E54112C79E71800559C27 /* To-Do List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "To-Do List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C3E54142C79E71800559C27 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C3E54162C79E71800559C27 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 		7C3E54382C7BB9C300559C27 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				7C1E14A92C7CBB9000A700D7 /* AlertManager.swift */,
 				7C3E54392C7BB9DA00559C27 /* ColorUtility.swift */,
 			);
 			path = Helpers;
@@ -222,6 +225,7 @@
 				7C3E54342C79E93800559C27 /* ToDoItem.swift in Sources */,
 				7C3E54302C79E8E300559C27 /* NetworkManager.swift in Sources */,
 				7C3E542D2C79E89600559C27 /* TaskModel.swift in Sources */,
+				7C1E14AA2C7CBB9000A700D7 /* AlertManager.swift in Sources */,
 				7C3E54322C79E91000559C27 /* ToDoResponse.swift in Sources */,
 				7C3E54172C79E71800559C27 /* SceneDelegate.swift in Sources */,
 				7C3E543C2C7BBF8800559C27 /* AddTaskViewController.swift in Sources */,
