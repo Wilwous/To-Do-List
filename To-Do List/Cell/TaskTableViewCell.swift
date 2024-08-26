@@ -5,18 +5,29 @@
 //  Created by Антон Павлов on 23.08.2024.
 //
 
-//
-//  TaskTableViewCell.swift
-//  To-Do List
-//
-//  Created by Антон Павлов on 23.08.2024.
-//
-
 import UIKit
+
+protocol TaskTableViewCellDelegate: AnyObject {
+    func didTapOptionsButton(in cell: TaskTableViewCell)
+}
 
 final class TaskTableViewCell: UITableViewCell {
     
+    // MARK: - Delegate
+    
+    weak var delegate: TaskTableViewCellDelegate?
+    
     // MARK: - UI Components
+    
+    private let pinnedIcon: UIImageView = {
+        let imageView = UIImageView()
+        let image = UIImage(named: "pinIcon")?.withRenderingMode(.alwaysTemplate)
+        imageView.image = image
+        imageView.tintColor = .wBlue
+        imageView.isHidden = true
+        
+        return imageView
+    }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -52,13 +63,13 @@ final class TaskTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let statusIcon: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 10
-        imageView.layer.masksToBounds = true
+    private let statusButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        button.layer.cornerRadius = 10
+        button.layer.masksToBounds = true
         
-        return imageView
+        return button
     }()
     
     private let containerView: UIView = {
@@ -70,6 +81,20 @@ final class TaskTableViewCell: UITableViewCell {
         view.layer.borderColor = UIColor.gray.withAlphaComponent(0.5).cgColor
         
         return view
+    }()
+    
+    private let optionsButton: UIButton = {
+        let button = UIButton(type: .system)
+        let image = UIImage(systemName: "ellipsis")
+        button.setImage(image, for: .normal)
+        button.tintColor = .lightGray
+        button.addTarget(
+            self,
+            action: #selector(optionsButtonTapped),
+            for: .touchUpInside
+        )
+        
+        return button
     }()
     
     // MARK: - Initializer
@@ -97,12 +122,15 @@ final class TaskTableViewCell: UITableViewCell {
         colorIndicator.backgroundColor = task.color
         
         if task.isCompleted {
-            statusIcon.image = UIImage(systemName: "checkmark.circle.fill")
-            statusIcon.tintColor = .systemGreen
+            statusButton.setTitle("Выполнено", for: .normal)
+            statusButton.backgroundColor = .wLightLime
+            statusButton.setTitleColor(.wVividGreen, for: .normal)
         } else {
-            statusIcon.image = UIImage(systemName: "circle")
-            statusIcon.tintColor = .systemGray
+            statusButton.setTitle("Не выполнено", for: .normal)
+            statusButton.backgroundColor = .wFogGray
+            statusButton.setTitleColor(.wSilverGray, for: .normal)
         }
+        pinnedIcon.isHidden = !task.isPinned
     }
     
     // MARK: - Setup View
@@ -113,7 +141,9 @@ final class TaskTableViewCell: UITableViewCell {
          titleLabel,
          descriptionLabel,
          dateLabel,
-         statusIcon
+         optionsButton,
+         statusButton,
+         pinnedIcon
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             contentView.addSubview($0)
@@ -134,21 +164,35 @@ final class TaskTableViewCell: UITableViewCell {
             
             titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             titleLabel.leadingAnchor.constraint(equalTo: colorIndicator.trailingAnchor, constant: 15),
-            titleLabel.trailingAnchor.constraint(equalTo: statusIcon.leadingAnchor, constant: -10),
+            titleLabel.trailingAnchor.constraint(equalTo: optionsButton.leadingAnchor, constant: -10),
             
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
             descriptionLabel.leadingAnchor.constraint(equalTo: colorIndicator.trailingAnchor, constant: 15),
-            descriptionLabel.trailingAnchor.constraint(equalTo: statusIcon.leadingAnchor, constant: -10),
+            descriptionLabel.trailingAnchor.constraint(equalTo: optionsButton.leadingAnchor, constant: -10),
             
             dateLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 5),
             dateLabel.leadingAnchor.constraint(equalTo: colorIndicator.trailingAnchor, constant: 15),
-            dateLabel.trailingAnchor.constraint(equalTo: statusIcon.leadingAnchor, constant: -10),
+            dateLabel.trailingAnchor.constraint(equalTo: optionsButton.leadingAnchor, constant: -10),
             dateLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
             
-            statusIcon.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            statusIcon.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
-            statusIcon.widthAnchor.constraint(equalToConstant: 24),
-            statusIcon.heightAnchor.constraint(equalToConstant: 24)
+            optionsButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            optionsButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            optionsButton.widthAnchor.constraint(equalToConstant: 24),
+            optionsButton.heightAnchor.constraint(equalToConstant: 24),
+            
+            statusButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+            statusButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -15),
+            statusButton.heightAnchor.constraint(equalToConstant: 20),
+            statusButton.widthAnchor.constraint(equalToConstant: 100),
+            
+            pinnedIcon.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            pinnedIcon.trailingAnchor.constraint(equalTo: optionsButton.leadingAnchor, constant: -10)
         ])
+    }
+    
+    // MARK: - Action
+    
+    @objc private func optionsButtonTapped() {
+        delegate?.didTapOptionsButton(in: self)
     }
 }

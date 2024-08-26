@@ -67,9 +67,7 @@ final class ToDoListViewController: UIViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
-            action: #selector(
-                addTaskTapped
-            )
+            action: #selector(addTaskTapped)
         )
         
         let backButton = UIBarButtonItem()
@@ -79,7 +77,7 @@ final class ToDoListViewController: UIViewController {
     
     private func addElements() {
         [tableView,
-        activityIndicator
+         activityIndicator
         ].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
@@ -122,6 +120,17 @@ final class ToDoListViewController: UIViewController {
         }
     }
     
+    // MARK: - Private Methods
+    
+    private func editTaskTapped(task: TaskModel) {
+        let addTaskVC = AddTaskViewController()
+        addTaskVC.delegate = self
+        addTaskVC.taskToEdit = task
+        navigationController?.pushViewController(addTaskVC, animated: true)
+    }
+    
+    // MARK: - Action
+    
     @objc private func addTaskTapped() {
         let addTaskVC = AddTaskViewController()
         addTaskVC.delegate = self
@@ -144,6 +153,7 @@ extension ToDoListViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath) as! TaskTableViewCell
         let task = tasks[indexPath.row]
         cell.configure(with: task)
+        cell.delegate = self
         
         return cell
     }
@@ -155,5 +165,50 @@ extension ToDoListViewController: AddTaskViewControllerDelegate {
     func didAddTask(_ task: TaskModel) {
         tasks.append(task)
         tableView.reloadData()
+    }
+    
+    func didEditTask(_ task: TaskModel) {
+        if let index = tasks.firstIndex(where: { $0.id == task.id }) {
+            tasks[index] = task
+            tableView.reloadData()
+        }
+    }
+}
+
+// MARK: - TaskTableViewCellDelegate
+
+extension ToDoListViewController: TaskTableViewCellDelegate {
+    func didTapOptionsButton(in cell: TaskTableViewCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
+        var task = tasks[indexPath.row]
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        alertController.addAction(
+            UIAlertAction(title: task.isPinned ? "Открепить" : "Закрепить", style: .default, handler: { _ in
+                task.isPinned.toggle()
+                self.tasks[indexPath.row] = task
+                self.tasks.sort {
+                    if $0.isPinned == $1.isPinned {
+                        return $0.creationDate < $1.creationDate
+                    } else {
+                        return $0.isPinned && !$1.isPinned
+                    }
+                }
+                self.tableView.reloadData()
+            }))
+        
+        alertController.addAction(UIAlertAction(title: "Редактировать", style: .default, handler: { _ in
+            self.editTaskTapped(task: task)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { _ in
+            self.tasks.remove(at: indexPath.row)
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        
+        present(alertController, animated: true)
     }
 }

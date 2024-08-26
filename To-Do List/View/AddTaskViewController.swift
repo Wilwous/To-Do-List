@@ -11,6 +11,7 @@ import UIKit
 
 protocol AddTaskViewControllerDelegate: AnyObject {
     func didAddTask(_ task: TaskModel)
+    func didEditTask(_ task: TaskModel)
 }
 
 final class AddTaskViewController: UIViewController {
@@ -18,6 +19,10 @@ final class AddTaskViewController: UIViewController {
     // MARK: - Delegate
     
     weak var delegate: AddTaskViewControllerDelegate?
+    
+    // MARK: - Public Properties
+    
+    var taskToEdit: TaskModel?
     
     // MARK: - Private Properties
     
@@ -88,15 +93,13 @@ final class AddTaskViewController: UIViewController {
     
     private lazy var creationButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Создать", for: .normal)
+        button.setTitle(taskToEdit == nil ? "Создать" : "Сохранить", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .wBlue
         button.layer.cornerRadius = 16
         button.addTarget(
             self,
-            action: #selector(
-                creationButtonTapped
-            ),
+            action: #selector(creationButtonTapped),
             for: .touchUpInside
         )
         
@@ -108,9 +111,10 @@ final class AddTaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        title = "Создание задачи"
+        title = taskToEdit == nil ? "Создание задачи" : "Редактирование задачи"
         addElements()
         layoutConstraint()
+        configureViewIfEditing()
     }
     
     // MARK: - Setup View
@@ -159,6 +163,15 @@ final class AddTaskViewController: UIViewController {
         ])
     }
     
+    private func configureViewIfEditing() {
+        guard let task = taskToEdit else { return }
+        titleTextField.text = task.title
+        descriptionTextView.text = task.description
+        selectedColor = task.color
+        descriptionPlaceholderLabel.isHidden = !task.description.isEmpty
+        colorCollectionView.reloadData()
+    }
+    
     // MARK: - Actions
     
     @objc private func creationButtonTapped() {
@@ -173,16 +186,24 @@ final class AddTaskViewController: UIViewController {
         }
         
         let selectedColor = self.selectedColor ?? ColorUtility.getRandomColor()
-        let newTask = TaskModel(
-            id: Int.random(in: 1...1000),
-            title: title,
-            description: description,
-            creationDate: Date(),
-            isCompleted: false,
-            color: selectedColor
-        )
         
-        delegate?.didAddTask(newTask)
+        if var task = taskToEdit {
+            task.title = title
+            task.description = description
+            task.color = selectedColor
+            delegate?.didEditTask(task)
+        } else {
+            let newTask = TaskModel(
+                id: Int.random(in: 1...1000),
+                title: title,
+                description: description,
+                creationDate: Date(),
+                isCompleted: false,
+                color: selectedColor
+            )
+            delegate?.didAddTask(newTask)
+        }
+        
         navigationController?.popViewController(animated: true)
     }
 }

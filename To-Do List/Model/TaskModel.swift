@@ -9,9 +9,10 @@ import UIKit
 
 struct TaskModel {
     let id: Int
-    let title: String
-    let description: String
-    let creationDate: Date
-    let isCompleted: Bool
-    let color: UIColor
+    var title: String
+    var description: String
+    var creationDate: Date
+    var isCompleted: Bool
+    var color: UIColor
+    var isPinned: Bool = false
 }
