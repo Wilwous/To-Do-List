@@ -188,9 +188,18 @@ final class AddTaskViewController: UIViewController {
         let selectedColor = self.selectedColor ?? ColorUtility.getRandomColor()
         
         if var task = taskToEdit {
+            
             task.title = title
             task.description = description
             task.color = selectedColor
+            
+            if let existingTaskEntity = CoreDataManager.shared.fetchTasks().first(where: { $0.id == Int64(task.id) }) {
+                existingTaskEntity.title = title
+                existingTaskEntity.descriptionText = description
+                existingTaskEntity.color = selectedColor
+                CoreDataManager.shared.saveContext()
+            }
+            
             delegate?.didEditTask(task)
         } else {
             let newTask = TaskModel(
@@ -201,6 +210,17 @@ final class AddTaskViewController: UIViewController {
                 isCompleted: false,
                 color: selectedColor
             )
+            
+            CoreDataManager.shared.saveTask(
+                id: Int64(newTask.id),
+                title: newTask.title,
+                descriptionText: newTask.description,
+                creationDate: newTask.creationDate,
+                isCompleted: newTask.isCompleted,
+                color: newTask.color,
+                isPinned: newTask.isPinned
+            )
+            
             delegate?.didAddTask(newTask)
         }
         

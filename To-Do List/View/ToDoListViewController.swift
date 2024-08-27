@@ -100,22 +100,80 @@ final class ToDoListViewController: UIViewController {
     
     private func fetchTasks() {
         activityIndicator.startAnimating()
-        NetworkManager.shared.fetchTasks { [weak self] result in
-            DispatchQueue.main.async {
-                self?.activityIndicator.stopAnimating()
-                self?.refreshControl.endRefreshing()
-                switch result {
-                case .success(let tasks):
-                    self?.tasks = tasks
-                    self?.tableView.reloadData()
-                case .failure(let error):
-                    print("Failed to fetch tasks: \(error)")
-                    AlertManager.showAlert(
-                        on: self!,
-                        title: "Ошибка",
-                        message: "Не удалось загрузить задачи. Попробуйте снова."
-                    )
+        
+        let coreDataTasks = CoreDataManager.shared.fetchTasks()
+        
+        if coreDataTasks.isEmpty {
+            NetworkManager.shared.fetchTasks { [weak self] result in
+                DispatchQueue.main.async {
+                    self?.activityIndicator.stopAnimating()
+                    self?.refreshControl.endRefreshing()
+                    
+                    switch result {
+                    case .success(let tasks):
+                        tasks.forEach { task in
+                            CoreDataManager.shared.saveTask(
+                                id: Int64(task.id),
+                                title: task.title,
+                                descriptionText: task.description,
+                                creationDate: task.creationDate,
+                                isCompleted: task.isCompleted,
+                                color: task.color,
+                                isPinned: task.isPinned
+                            )
+                        }
+                        self?.tasks = CoreDataManager.shared.fetchTasks().map { taskEntity in
+                            return TaskModel(
+                                id: Int(taskEntity.id),
+                                title: taskEntity.title ?? "",
+                                description: taskEntity.descriptionText ?? "",
+                                creationDate: taskEntity.creationDate ?? Date(),
+                                isCompleted: taskEntity.isCompleted,
+                                color: taskEntity.color as? UIColor ?? UIColor.white,
+                                isPinned: taskEntity.isPinned
+                            )
+                        }
+                        self?.tasks.sort {
+                            if $0.isPinned == $1.isPinned {
+                                return $0.creationDate < $1.creationDate
+                            } else {
+                                return $0.isPinned && !$1.isPinned
+                            }
+                        }
+                        self?.tableView.reloadData()
+                    case .failure(let error):
+                        print("Failed to fetch tasks: \(error)")
+                        AlertManager.showAlert(
+                            on: self!,
+                            title: "Ошибка",
+                            message: "Не удалось загрузить задачи. Попробуйте снова."
+                        )
+                    }
                 }
+            }
+        } else {
+            self.tasks = coreDataTasks.map { taskEntity in
+                return TaskModel(
+                    id: Int(taskEntity.id),
+                    title: taskEntity.title ?? "",
+                    description: taskEntity.descriptionText ?? "",
+                    creationDate: taskEntity.creationDate ?? Date(),
+                    isCompleted: taskEntity.isCompleted,
+                    color: taskEntity.color as? UIColor ?? UIColor.white,
+                    isPinned: taskEntity.isPinned
+                )
+            }
+            self.tasks.sort {
+                if $0.isPinned == $1.isPinned {
+                    return $0.creationDate < $1.creationDate
+                } else {
+                    return $0.isPinned && !$1.isPinned
+                }
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.activityIndicator.stopAnimating()
+                self.refreshControl.endRefreshing()
             }
         }
     }
@@ -185,8 +243,15 @@ extension ToDoListViewController: TaskTableViewCellDelegate {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         alertController.addAction(
-            UIAlertAction(title: task.isPinned ? "Открепить" : "Закрепить", style: .default, handler: { _ in
+            UIAlertAction(title: task.isPinned ? "Открепить" : "Закрепить", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
                 task.isPinned.toggle()
+                
+                if let taskEntityToUpdate = CoreDataManager.shared.fetchTasks().first(where: { $0.id == Int64(task.id) }) {
+                    taskEntityToUpdate.isPinned = task.isPinned
+                    CoreDataManager.shared.saveContext()
+                }
+                
                 self.tasks[indexPath.row] = task
                 self.tasks.sort {
                     if $0.isPinned == $1.isPinned {
@@ -196,16 +261,29 @@ extension ToDoListViewController: TaskTableViewCellDelegate {
                     }
                 }
                 self.tableView.reloadData()
-            }))
+            })
+        )
         
-        alertController.addAction(UIAlertAction(title: "Редактировать", style: .default, handler: { _ in
-            self.editTaskTapped(task: task)
-        }))
+        alertController.addAction(
+            UIAlertAction(title: "Редактировать", style: .default, handler: { [weak self] _ in
+                guard let self = self else { return }
+                self.editTaskTapped(task: task)
+            })
+        )
         
-        alertController.addAction(UIAlertAction(title: "Удалить", style: .destructive, handler: { _ in
-            self.tasks.remove(at: indexPath.row)
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
-        }))
+        alertController.addAction(
+            UIAlertAction(title: "Удалить", style: .destructive, handler: { [weak self] _ in
+                guard let self = self else { return }
+                let taskToRemove = self.tasks[indexPath.row]
+                
+                if let taskEntityToRemove = CoreDataManager.shared.fetchTasks().first(where: { $0.id == Int64(taskToRemove.id) }) {
+                    CoreDataManager.shared.deleteTask(taskEntityToRemove)
+                }
+                
+                self.tasks.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            })
+        )
         
         alertController.addAction(UIAlertAction(title: "Отмена", style: .cancel))
         
