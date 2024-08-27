@@ -33,7 +33,7 @@ final class AddTaskViewController: UIViewController {
     
     private lazy var titleTextField: UITextField = {
         let text = UITextField()
-        text.placeholder = "Заголовок"
+        text.placeholder = LocalizationHelper.localizedString("title")
         text.font = .systemFont(ofSize: 17)
         text.textAlignment = .left
         text.borderStyle = .none
@@ -67,7 +67,7 @@ final class AddTaskViewController: UIViewController {
     
     private lazy var descriptionPlaceholderLabel: UILabel = {
         let label = UILabel()
-        label.text = "Описание"
+        label.text = LocalizationHelper.localizedString("description")
         label.font = .systemFont(ofSize: 17)
         label.textColor = UIColor.gray.withAlphaComponent(0.5)
         label.isHidden = !descriptionTextView.text.isEmpty
@@ -93,7 +93,14 @@ final class AddTaskViewController: UIViewController {
     
     private lazy var creationButton: UIButton = {
         let button = UIButton()
-        button.setTitle(taskToEdit == nil ? "Создать" : "Сохранить", for: .normal)
+        button.setTitle(
+            taskToEdit == nil ? LocalizationHelper.localizedString(
+                "create"
+            ) : LocalizationHelper.localizedString(
+                "save"
+            ),
+            for: .normal
+        )
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .wBlue
         button.layer.cornerRadius = 16
@@ -111,7 +118,11 @@ final class AddTaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .wBackground
-        title = taskToEdit == nil ? "Создание задачи" : "Редактирование задачи"
+        title = taskToEdit == nil ? LocalizationHelper.localizedString(
+            "createTask"
+        ) : LocalizationHelper.localizedString(
+            "editingTask"
+        )
         addElements()
         layoutConstraint()
         configureViewIfEditing()
@@ -179,8 +190,8 @@ final class AddTaskViewController: UIViewController {
               let description = descriptionTextView.text, !description.isEmpty else {
             AlertManager.showAlert(
                 on: self,
-                title: "Ошибка",
-                message: "Пожалуйста, заполните все поля"
+                title: LocalizationHelper.localizedString("error"),
+                message: LocalizationHelper.localizedString("errorText2")
             )
             return
         }

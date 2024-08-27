@@ -1,0 +1,34 @@
+/* 
+  Localizable.strings
+  To-Do List
+
+  Created by Антон Павлов on 27.08.2024.
+  
+*/
+
+// MARK: - ToDoListViewController
+
+"listTasks" = "Список задач";
+"back" = "Назад";
+"errorText1" = "Не удалось загрузить задачи. Попробуйте снова";
+"pin" = "Закрепить";
+"unpin" = "Открепить";
+"edit" = "Редактировать";
+"delete" = "Удалить";
+"cancel" = "Отмена";
+
+// MARK: - AddTaskViewController
+
+"title" = "Заголовок";
+"description" = "Описание";
+"save" = "Сохранить";
+"creat" = "Создать";
+"createTask" = "Создание задачи";
+"editingTask" = "Редактирование задачи";
+"error" = "Ошибка";
+"errorText2" = "Пожалуйста, заполните все поля";
+
+// MARK: - TaskTableViewCell
+
+"done" = "Выполнено";
+"undone" = "Не выполнено";

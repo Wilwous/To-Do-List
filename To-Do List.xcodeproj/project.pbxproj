@@ -23,6 +23,8 @@
 		7C3E543A2C7BB9DA00559C27 /* ColorUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3E54392C7BB9DA00559C27 /* ColorUtility.swift */; };
 		7C3E543C2C7BBF8800559C27 /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3E543B2C7BBF8800559C27 /* AddTaskViewController.swift */; };
 		7C3E543E2C7BC24D00559C27 /* ColorCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3E543D2C7BC24D00559C27 /* ColorCollection.swift */; };
+		7C72AE532C7DE062002C3113 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 7C72AE512C7DE062002C3113 /* Localizable.strings */; };
+		7C72AE572C7DE15D002C3113 /* LocalizationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C72AE562C7DE15D002C3113 /* LocalizationHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,10 @@
 		7C3E54392C7BB9DA00559C27 /* ColorUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorUtility.swift; sourceTree = "<group>"; };
 		7C3E543B2C7BBF8800559C27 /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 		7C3E543D2C7BC24D00559C27 /* ColorCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollection.swift; sourceTree = "<group>"; };
+		7C72AE522C7DE062002C3113 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7C72AE542C7DE06F002C3113 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		7C72AE552C7DE06F002C3113 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7C72AE562C7DE15D002C3113 /* LocalizationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +118,7 @@
 			children = (
 				7C3E541F2C79E71A00559C27 /* LaunchScreen.storyboard */,
 				7C3E541D2C79E71A00559C27 /* Assets.xcassets */,
+				7C72AE512C7DE062002C3113 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -157,6 +164,7 @@
 			children = (
 				7C1E14A92C7CBB9000A700D7 /* AlertManager.swift */,
 				7C3E54392C7BB9DA00559C27 /* ColorUtility.swift */,
+				7C72AE562C7DE15D002C3113 /* LocalizationHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -203,6 +211,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 7C3E54082C79E71800559C27;
 			productRefGroup = 7C3E54122C79E71800559C27 /* Products */;
@@ -220,6 +229,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C3E541E2C79E71A00559C27 /* Assets.xcassets in Resources */,
+				7C72AE532C7DE062002C3113 /* Localizable.strings in Resources */,
 				7C3E54212C79E71A00559C27 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,6 +255,7 @@
 				7C3E54172C79E71800559C27 /* SceneDelegate.swift in Sources */,
 				7C1E14DE2C7DAD5700A700D7 /* CoreDataManager.swift in Sources */,
 				7C3E543C2C7BBF8800559C27 /* AddTaskViewController.swift in Sources */,
+				7C72AE572C7DE15D002C3113 /* LocalizationHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,8 +266,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				7C3E54202C79E71A00559C27 /* Base */,
+				7C72AE542C7DE06F002C3113 /* ru */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		7C72AE512C7DE062002C3113 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7C72AE522C7DE062002C3113 /* en */,
+				7C72AE552C7DE06F002C3113 /* ru */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -267,6 +288,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -314,7 +336,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -330,6 +352,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -371,7 +394,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

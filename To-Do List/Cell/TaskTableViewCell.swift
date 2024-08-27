@@ -127,11 +127,11 @@ final class TaskTableViewCell: UITableViewCell {
         dateLabel.textColor = .secondaryLabel
         
         if task.isCompleted {
-            statusButton.setTitle("Выполнено", for: .normal)
+            statusButton.setTitle(LocalizationHelper.localizedString("done"), for: .normal)
             statusButton.backgroundColor = .wBackgroundDone
             statusButton.setTitleColor(.wTextDone, for: .normal)
         } else {
-            statusButton.setTitle("Не выполнено", for: .normal)
+            statusButton.setTitle(LocalizationHelper.localizedString("undone"), for: .normal)
             statusButton.backgroundColor = .wBackgroundUndone
             statusButton.setTitleColor(.wTextUndone, for: .normal)
         }

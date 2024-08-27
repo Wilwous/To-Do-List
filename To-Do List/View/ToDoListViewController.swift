@@ -64,7 +64,7 @@ final class ToDoListViewController: UIViewController {
     // MARK: - Setup View
     
     private func setupNavigationBar() {
-        title = "Список задач"
+        title = LocalizationHelper.localizedString("listTasks")
         
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
@@ -82,7 +82,7 @@ final class ToDoListViewController: UIViewController {
         )
         
         let backButton = UIBarButtonItem()
-        backButton.title = "Назад"
+        backButton.title = LocalizationHelper.localizedString("back")
         backButton.tintColor = UIColor(named: "wBlue")
         navigationItem.backBarButtonItem = backButton
     }
@@ -157,8 +157,8 @@ final class ToDoListViewController: UIViewController {
                         print("Failed to fetch tasks: \(error)")
                         AlertManager.showAlert(
                             on: self!,
-                            title: "Ошибка",
-                            message: "Не удалось загрузить задачи. Попробуйте снова."
+                            title: LocalizationHelper.localizedString("error"),
+                            message: LocalizationHelper.localizedString("errorText1")
                         )
                     }
                 }
@@ -255,7 +255,7 @@ extension ToDoListViewController: TaskTableViewCellDelegate {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         alertController.addAction(
-            UIAlertAction(title: task.isPinned ? "Открепить" : "Закрепить", style: .default, handler: { [weak self] _ in
+            UIAlertAction(title: task.isPinned ? LocalizationHelper.localizedString("pin") : LocalizationHelper.localizedString("unpin"), style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 task.isPinned.toggle()
                 
@@ -277,27 +277,34 @@ extension ToDoListViewController: TaskTableViewCellDelegate {
         )
         
         alertController.addAction(
-            UIAlertAction(title: "Редактировать", style: .default, handler: { [weak self] _ in
+            UIAlertAction(title: LocalizationHelper.localizedString("edit"), style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 self.editTaskTapped(task: task)
             })
         )
         
         alertController.addAction(
-            UIAlertAction(title: "Удалить", style: .destructive, handler: { [weak self] _ in
-                guard let self = self else { return }
-                let taskToRemove = self.tasks[indexPath.row]
-                
-                if let taskEntityToRemove = CoreDataManager.shared.fetchTasks().first(where: { $0.id == Int64(taskToRemove.id) }) {
-                    CoreDataManager.shared.deleteTask(taskEntityToRemove)
-                }
-                
-                self.tasks.remove(at: indexPath.row)
-                self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            })
+            UIAlertAction(title: LocalizationHelper.localizedString("delete"),
+                          style: .destructive,
+                          handler: {
+                              [weak self] _ in
+                              guard let self = self else { return }
+                              let taskToRemove = self.tasks[indexPath.row]
+                              
+                              if let taskEntityToRemove = CoreDataManager.shared.fetchTasks().first(where: {
+                                  $0.id == Int64(
+                                    taskToRemove.id
+                                  )
+                              }) {
+                                  CoreDataManager.shared.deleteTask(taskEntityToRemove)
+                              }
+                              
+                              self.tasks.remove(at: indexPath.row)
+                              self.tableView.deleteRows(at: [indexPath], with: .automatic)
+                          })
         )
         
-        alertController.addAction(UIAlertAction(title: "Отмена", style: .cancel))
+        alertController.addAction(UIAlertAction(title: LocalizationHelper.localizedString("cancel"), style: .cancel))
         
         present(alertController, animated: true)
     }
