@@ -52,6 +52,7 @@ final class ColorCollection: UICollectionViewCell {
         } else {
             borderView.layer.borderColor = UIColor.clear.cgColor
         }
+        contentView.backgroundColor = .wBackground
     }
     
     // MARK: - Setup View

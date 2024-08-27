@@ -102,7 +102,8 @@ final class TaskTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
-        contentView.backgroundColor = .clear
+        contentView.backgroundColor = .wBackground
+        containerView.backgroundColor = .wCellBackground
         addElements()
         setupLayoutConstraint()
     }
@@ -121,14 +122,18 @@ final class TaskTableViewCell: UITableViewCell {
         dateLabel.text = dateFormatter.string(from: task.creationDate)
         colorIndicator.backgroundColor = task.color
         
+        titleLabel.textColor = .label
+        descriptionLabel.textColor = .secondaryLabel
+        dateLabel.textColor = .secondaryLabel
+        
         if task.isCompleted {
             statusButton.setTitle("Выполнено", for: .normal)
-            statusButton.backgroundColor = .wLightLime
-            statusButton.setTitleColor(.wVividGreen, for: .normal)
+            statusButton.backgroundColor = .wBackgroundDone
+            statusButton.setTitleColor(.wTextDone, for: .normal)
         } else {
             statusButton.setTitle("Не выполнено", for: .normal)
-            statusButton.backgroundColor = .wFogGray
-            statusButton.setTitleColor(.wSilverGray, for: .normal)
+            statusButton.backgroundColor = .wBackgroundUndone
+            statusButton.setTitleColor(.wTextUndone, for: .normal)
         }
         pinnedIcon.isHidden = !task.isPinned
     }

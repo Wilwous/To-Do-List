@@ -37,8 +37,8 @@ final class AddTaskViewController: UIViewController {
         text.font = .systemFont(ofSize: 17)
         text.textAlignment = .left
         text.borderStyle = .none
-        text.textColor = .black
-        text.backgroundColor = .white
+        text.textColor = .label
+        text.backgroundColor = .wCellStroke
         text.layer.cornerRadius = 10
         text.layer.borderWidth = 1
         text.layer.borderColor = UIColor.gray.withAlphaComponent(0.5).cgColor
@@ -53,11 +53,11 @@ final class AddTaskViewController: UIViewController {
     private lazy var descriptionTextView: UITextView = {
         let text = UITextView()
         text.font = .systemFont(ofSize: 17)
-        text.textColor = .black
-        text.backgroundColor = .white
+        text.textColor = .label
+        text.backgroundColor = .wCellStroke
         text.layer.borderWidth = 1
         text.layer.cornerRadius = 10
-        text.layer.borderColor = UIColor.gray.withAlphaComponent(0.5).cgColor
+        text.layer.borderColor = UIColor.separator.cgColor
         text.textContainerInset = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 10)
         text.isScrollEnabled = true
         text.delegate = self
@@ -110,7 +110,7 @@ final class AddTaskViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .wBackground
         title = taskToEdit == nil ? "Создание задачи" : "Редактирование задачи"
         addElements()
         layoutConstraint()

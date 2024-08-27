@@ -24,6 +24,7 @@ final class ToDoListViewController: UIViewController {
     
     private lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
+        refresh.backgroundColor = .wBackground
         refresh.addTarget(
             self,
             action: #selector(refreshTasks),
@@ -53,7 +54,7 @@ final class ToDoListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .wBackground
         setupNavigationBar()
         addElements()
         setupLayoutConstraint()
@@ -64,6 +65,16 @@ final class ToDoListViewController: UIViewController {
     
     private func setupNavigationBar() {
         title = "Список задач"
+        
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named: "wBackground")
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label]
+        appearance.shadowColor = .clear
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
@@ -72,6 +83,7 @@ final class ToDoListViewController: UIViewController {
         
         let backButton = UIBarButtonItem()
         backButton.title = "Назад"
+        backButton.tintColor = UIColor(named: "wBlue")
         navigationItem.backBarButtonItem = backButton
     }
     
