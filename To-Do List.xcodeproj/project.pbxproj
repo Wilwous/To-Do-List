@@ -96,7 +96,7 @@
 				7C3E54382C7BB9C300559C27 /* Helpers */,
 				7C3E542E2C79E8D500559C27 /* Network */,
 				7C3E542B2C79E87600559C27 /* Model */,
-				7C3E542A2C79E83100559C27 /* View */,
+				7C3E542A2C79E83100559C27 /* Controllers */,
 				7C3E54352C79F02200559C27 /* Cell */,
 				7C3E54292C79E82000559C27 /* Resources */,
 				7C3E54222C79E71A00559C27 /* Info.plist */,
@@ -123,13 +123,13 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		7C3E542A2C79E83100559C27 /* View */ = {
+		7C3E542A2C79E83100559C27 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				7C3E54182C79E71800559C27 /* ToDoListViewController.swift */,
 				7C3E543B2C7BBF8800559C27 /* AddTaskViewController.swift */,
 			);
-			path = View;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		7C3E542B2C79E87600559C27 /* Model */ = {

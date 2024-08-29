@@ -124,7 +124,7 @@ final class AddTaskViewController: UIViewController {
             "editingTask"
         )
         addElements()
-        layoutConstraint()
+        setupLayoutConstraint()
         configureViewIfEditing()
     }
     
@@ -147,7 +147,7 @@ final class AddTaskViewController: UIViewController {
         }
     }
     
-    private func layoutConstraint() {
+    private func setupLayoutConstraint() {
         NSLayoutConstraint.activate([
             titleTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             titleTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),

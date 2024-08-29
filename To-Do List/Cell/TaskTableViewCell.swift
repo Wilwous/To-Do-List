@@ -7,6 +7,8 @@
 
 import UIKit
 
+// MARK: - Protocol
+
 protocol TaskTableViewCellDelegate: AnyObject {
     func didTapOptionsButton(in cell: TaskTableViewCell)
 }
@@ -19,7 +21,7 @@ final class TaskTableViewCell: UITableViewCell {
     
     // MARK: - UI Components
     
-    private let pinnedIcon: UIImageView = {
+    private lazy var pinnedIcon: UIImageView = {
         let imageView = UIImageView()
         let image = UIImage(named: "pinIcon")?.withRenderingMode(.alwaysTemplate)
         imageView.image = image
@@ -29,7 +31,7 @@ final class TaskTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    private let titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.numberOfLines = 0
@@ -37,7 +39,7 @@ final class TaskTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.numberOfLines = 0
@@ -46,7 +48,7 @@ final class TaskTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let dateLabel: UILabel = {
+    private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = .gray
@@ -54,7 +56,7 @@ final class TaskTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let colorIndicator: UIView = {
+    private lazy var colorIndicator: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 10
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
@@ -63,7 +65,7 @@ final class TaskTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let statusButton: UIButton = {
+    private lazy var statusButton: UIButton = {
         let button = UIButton(type: .system)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         button.layer.cornerRadius = 10
@@ -72,7 +74,7 @@ final class TaskTableViewCell: UITableViewCell {
         return button
     }()
     
-    private let containerView: UIView = {
+    private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         view.layer.cornerRadius = 12
@@ -83,7 +85,7 @@ final class TaskTableViewCell: UITableViewCell {
         return view
     }()
     
-    private let optionsButton: UIButton = {
+    private lazy var optionsButton: UIButton = {
         let button = UIButton(type: .system)
         let image = UIImage(systemName: "ellipsis")
         button.setImage(image, for: .normal)
@@ -113,7 +115,7 @@ final class TaskTableViewCell: UITableViewCell {
     }
     
     // MARK: - Public Methods
-    
+
     func configure(with task: TaskModel) {
         titleLabel.text = task.title
         descriptionLabel.text = task.description
@@ -137,7 +139,7 @@ final class TaskTableViewCell: UITableViewCell {
         }
         pinnedIcon.isHidden = !task.isPinned
     }
-    
+
     // MARK: - Setup View
     
     private func addElements() {
