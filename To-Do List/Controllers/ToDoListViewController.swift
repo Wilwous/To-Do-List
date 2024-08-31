@@ -254,7 +254,7 @@ extension ToDoListViewController: TaskTableViewCellDelegate {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         alertController.addAction(
-            UIAlertAction(title: task.isPinned ? LocalizationHelper.localizedString("pin") : LocalizationHelper.localizedString("unpin"), style: .default, handler: { [weak self] _ in
+            UIAlertAction(title: task.isPinned ? LocalizationHelper.localizedString("unpin") : LocalizationHelper.localizedString("pin"), style: .default, handler: { [weak self] _ in
                 guard let self = self else { return }
                 task.isPinned.toggle()
                 

@@ -34,7 +34,7 @@ final class TaskTableViewCell: UITableViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 18)
-        label.numberOfLines = 0
+        label.numberOfLines = 3
         
         return label
     }()
@@ -42,7 +42,7 @@ final class TaskTableViewCell: UITableViewCell {
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 14)
-        label.numberOfLines = 0
+        label.numberOfLines = 3
         label.textColor = .gray
         
         return label
